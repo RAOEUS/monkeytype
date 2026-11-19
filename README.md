@@ -1,3 +1,71 @@
+# monkeysteno
+
+A fork of [Monkeytype](https://github.com/monkeytypegame/monkeytype) for practising stenography with [Plover](https://www.openstenoproject.org/plover/).
+
+It adds a **steno mode** that talks to the Plover running on your computer. The hints you see are answered by Plover itself, so they follow your system, your dictionaries and their order.
+
+Steno mode is on by default. With it off, this is plain Monkeytype.
+
+## What steno mode does
+
+- **Stroke hints** under the test, for the word your next stroke writes: the outline, its alternatives, and a phrase brief when one covers the next words too. Shown as text, or drawn on a steno board.
+- **Your dictionaries**: the active system, dictionary priority, overrides, disabled dictionaries and Python dictionaries (such as phrasing dictionaries) all apply, because Plover does the lookups.
+- **Capitalization**: a cap, lower or caps stroke is shown when the word needs one, and left out where Plover capitalizes by itself after a full stop.
+- **Punctuation and symbols**, including [Emily's symbols](https://github.com/EPLHREU/emily-symbols) with the spacing and capitalization the text needs.
+- **Words without an entry** are split at hyphens and `'s`, then fingerspelled.
+- **Accuracy that fits steno**: measured on the text as it stands. What the next stroke of an outline replaces is not an error.
+- **Stroke stats** on the result (strokes, undone strokes, stroke accuracy, strokes per word), and a tape of your last strokes under the hints.
+- **Settings that suit Plover**: steno mode turns freedom mode on, and confidence mode, strict space, stop on error and delete on error off. They would otherwise refuse or change the corrections Plover makes.
+
+The `steno` button above the test opens its settings: steno mode on or off, hints as text, as a diagram or off, and the address Plover listens on.
+
+## Setting up Plover
+
+You need [Plover](https://github.com/openstenoproject/plover/releases) 4 or newer and the engine server plugin from [this fork](https://github.com/RAOEUS/plover_websocket_server/tree/feat/query-response-and-engine-control). The plugin of the same name in Plover's Plugin Manager cannot answer lookups.
+
+1. Get the plugin and install it into Plover:
+
+   ```
+   git clone -b feat/query-response-and-engine-control https://github.com/RAOEUS/plover_websocket_server
+   plover -s plover_plugins install -e plover_websocket_server
+   ```
+
+   No `plover` command? Use Plover's own executable in its place: `plover_console.exe` on Windows, the AppImage on Linux, `/Applications/Plover.app/Contents/MacOS/Plover` on macOS.
+
+2. Restart Plover, open Configure, then Plugins, and enable `plover_engine_server`.
+3. Keep Plover running and open the page. It connects by itself. If Plover does not answer, these steps come up in the page.
+
+The connection is made **from your browser** to `ws://localhost:8086/websocket`. Plover has to run on the computer you type on, wherever the page itself is hosted. To change system or dictionaries, change them in Plover: the page follows.
+
+The plugin accepts connections from any page open in your browser and has no password by default. Keep that in mind on a shared computer.
+
+## Running it
+
+For development you need Node.js and pnpm in the versions [CONTRIBUTING_ADVANCED.md](./docs/CONTRIBUTING_ADVANCED.md#nodejs-and-pnpm) names, then:
+
+```
+pnpm install
+cp frontend/src/ts/constants/firebase-config-example.ts frontend/src/ts/constants/firebase-config.ts
+pnpm dev-fe
+```
+
+The page is at http://localhost:3000. No backend or Firebase project is needed to type and get hints.
+
+To host it, build the images from this repository instead of pulling Monkeytype's (commands in [docker/BUILD.md](./docker/BUILD.md)), then follow [SELF_HOSTING.md](./docs/SELF_HOSTING.md). Its compose file uses the same image names, so it picks up the ones you built.
+
+- Anywhere but `localhost`, the page has to be served over HTTPS, as SELF_HOSTING.md explains.
+- From an HTTPS page, the browser still has to be allowed to reach `ws://localhost`. Browsers treat this differently, and some ask for permission to reach devices on your local network. If the page stays on "plover not connected" while Plover runs, look there first.
+
+## Limits
+
+- The board diagram draws the English stenotype layout (English Stenotype, Lapwing). Strokes with other keys are shown as text.
+- A word without an entry is not broken into prefix and suffix strokes.
+- Emily's symbols are found under their default `SKWH` starter only.
+
+---
+
+What follows is Monkeytype's own readme.
+
 [![](https://github.com/monkeytypegame/monkeytype/blob/master/frontend/static/images/githubbanner2.png?raw=true)](https://monkeytype.com/)
 <br />
 
