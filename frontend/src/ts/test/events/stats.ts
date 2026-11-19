@@ -558,6 +558,28 @@ export function getInputHistory(eventLog: EventLog): string[] {
   return history;
 }
 
+/**
+ * Accuracy of the text as it stands: wrong, extra and missed characters
+ * against all of them. Steno mode's measure. Plover types what the first
+ * stroke of an outline translates to and replaces it on the next: wrong
+ * keypresses, not mistakes.
+ */
+export function getCharAccuracy(chars: CharCounts): {
+  correct: number;
+  incorrect: number;
+  percentage: number | null;
+} {
+  const correct = chars.allCorrect;
+  const incorrect = chars.incorrect + chars.extra + chars.missed;
+  const total = correct + incorrect;
+  return {
+    correct,
+    incorrect,
+    percentage: total === 0 ? null : (correct / total) * 100,
+  };
+}
+
+/** Correct against all keypresses. In steno mode: getCharAccuracy. */
 export function getAccuracy(
   eventLog: EventLog,
   testMs?: number,
@@ -566,6 +588,9 @@ export function getAccuracy(
   incorrect: number;
   percentage: number | null;
 } {
+  if (eventLog.context.stenoMode === true) {
+    return getCharAccuracy(getChars(eventLog, false, testMs));
+  }
   const { events } = eventLog;
 
   let correct = 0;

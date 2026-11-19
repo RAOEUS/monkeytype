@@ -39,6 +39,7 @@ export type ModalId =
   | "ForgotPassword"
   | "UserReport"
   | "EditResultTags"
+  | "Steno"
   | "TheRest";
 
 export type ModalVisibility = {

@@ -124,6 +124,11 @@ vi.mock("../../src/ts/firebase", () => ({
   getAuthenticatedUser: () => null,
   isAuthAvailable: () => false,
 }));
+// no Plover to connect to: jsdom's WebSocket rejects without a server
+vi.mock(import("../../src/ts/steno/plover"), async (importOriginal) => ({
+  ...(await importOriginal()),
+  connectPlover: () => undefined,
+}));
 // no canvas in jsdom; the result chart renders nothing
 vi.mock("../../src/ts/components/common/ChartJs", () => ({
   ChartJs: () => null,

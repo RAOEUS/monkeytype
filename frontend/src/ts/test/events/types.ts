@@ -146,6 +146,9 @@ export type EventLogContext = {
   isFunboxWithNospacePropertyActive?: boolean;
   bailedOut: boolean;
   hasKorean: boolean;
+  // steno mode: accuracy is measured on the text as it stands (see
+  // getCharAccuracy), not on keypresses
+  stenoMode?: true;
 };
 
 export const EVENT_LOG_VERSION = 1;

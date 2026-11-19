@@ -62,6 +62,7 @@ import { OutOfFocusWarning } from "./OutOfFocusWarning";
 import { Premid } from "./Premid";
 import * as ResultWordHighlight from "./result/result-word-highlight";
 import { TestResult } from "./result/TestResult";
+import { StenoHints } from "./StenoHints";
 import { TestConfig } from "./TestConfig";
 import { TestInitFailed } from "./TestInitFailed";
 import { Words, wordsModeClasses } from "./Words";
@@ -254,6 +255,10 @@ export function TestPage(): JSXElement {
           <Words wordsWrapperRef={() => wordsWrapperRef} />
         </div>
 
+        {/* padding: the margin of a word, so the hints line up with the text */}
+        <div class="full-width px-[0.3em]">
+          <StenoHints />
+        </div>
         <div>
           <CompositionDisplay />
         </div>

@@ -109,7 +109,11 @@ describe("TestPage", () => {
     });
 
     it("doesn't go back into a correct word", async () => {
-      const page = await renderTestPage({ words: ["the", "fox", "ran"] });
+      const page = await renderTestPage({
+        words: ["the", "fox", "ran"],
+        // on by default, for steno mode
+        config: { freedomMode: false },
+      });
 
       await page.type("the \b");
 

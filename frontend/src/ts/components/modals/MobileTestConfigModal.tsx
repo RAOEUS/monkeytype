@@ -119,6 +119,14 @@ export function MobileTestConfigModal(): JSXElement {
     <AnimatedModal id="MobileTestConfig" modalClass="grid gap-4">
       <div class="grid gap-2">
         <MCButton
+          text="steno"
+          active={getConfig.stenoMode}
+          onClick={() => showModal("Steno")}
+        />
+      </div>
+      <Separator />
+      <div class="grid gap-2">
+        <MCButton
           text="punctuation"
           active={getConfig.punctuation && !isPunctuationDisabled()}
           disabled={isPunctuationDisabled()}

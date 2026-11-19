@@ -929,6 +929,37 @@ describe("stats.ts", () => {
       expect(acc.incorrect).toBe(0);
     });
 
+    it("measures the text as it stands in steno mode", () => {
+      // Plover types "x" for the first stroke of an outline, then replaces
+      // it with "ab" on the second
+      pushWords("ab");
+      mockState.activeWordIndex = 0;
+      logTestEvent("timer", 1000, timer("start", 0));
+      logTestEvent("input", 1100, input({ data: "x", correct: false }));
+      logTestEvent("input", 1200, {
+        charIndex: 0,
+        wordIndex: 0,
+        inputType: "deleteContentBackward",
+        inputValue: "",
+      });
+      logTestEvent("input", 1210, input({ data: "a", inputValue: "a" }));
+      logTestEvent(
+        "input",
+        1220,
+        input({ charIndex: 1, data: "b", inputValue: "ab" }),
+      );
+
+      const eventLog = buildEventLog();
+      expect(getAccuracy(eventLog).percentage).toBeCloseTo(66.67, 1);
+
+      eventLog.context.stenoMode = true;
+      expect(getAccuracy(eventLog)).toEqual({
+        correct: 2,
+        incorrect: 0,
+        percentage: 100,
+      });
+    });
+
     it("counts inputStopped events in accuracy", () => {
       logTestEvent("input", 1100, input());
       logTestEvent(

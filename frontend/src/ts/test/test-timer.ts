@@ -22,7 +22,7 @@ import {
   getLiveCachedTestSeconds,
   getLiveCachedTimerStartMs,
 } from "./events/live-cache";
-import { getChars } from "./events/stats";
+import { getChars, getCharAccuracy } from "./events/stats";
 import { calculateWpm } from "../utils/numbers";
 import {
   getActiveWordIndex,
@@ -297,7 +297,10 @@ function timerStep(now: number, catchingUp: boolean): void {
     const chars = getChars(eventLog, true);
 
     const currentTestDurationMs = getLiveCachedTestDurationMs(now);
-    const acc = getLiveCachedAccuracy();
+    const acc =
+      eventLog.context.stenoMode === true
+        ? getCharAccuracy(chars).percentage
+        : getLiveCachedAccuracy();
     const wpmAndRaw = {
       wpm: Math.round(
         calculateWpm(chars.correctWord, currentTestDurationMs / 1000),

@@ -44,7 +44,10 @@ export function TestConfig(): JSXElement {
         )}
         data-ui-element="testConfig"
       >
-        <PuncAndNum />
+        <div class="flex place-self-end">
+          <Steno />
+          <PuncAndNum />
+        </div>
         <Mode />
         <Mode2 />
       </div>
@@ -86,6 +89,20 @@ function TCButton(props: {
       }}
       disabled={isFocusMode() || isTestFinished() || props.disabled}
     />
+  );
+}
+
+/** Opens the steno modal: steno mode, hints, and how to set Plover up. */
+function Steno(): JSXElement {
+  return (
+    <div class={cn("mr-(--card-gap)", cardClass)}>
+      <TCButton
+        fa={configMetadata.stenoMode.fa}
+        text="steno"
+        active={getConfig.stenoMode}
+        onClick={() => showModal("Steno")}
+      />
+    </div>
   );
 }
 

@@ -31,7 +31,8 @@ const obj: Config = {
   quoteLength: [1],
   language: "english",
   fontSize: 2,
-  freedomMode: false,
+  // steno mode is on by default: see steno/settings.ts
+  freedomMode: true,
   difficulty: "normal",
   blindMode: false,
   quickEnd: false,
@@ -43,6 +44,8 @@ const obj: Config = {
   confidenceMode: "off",
   indicateTypos: "off",
   compositionDisplay: "replace",
+  stenoMode: true,
+  stenoHints: "diagram",
   timerStyle: "mini",
   liveSpeedStyle: "off",
   liveAccStyle: "off",

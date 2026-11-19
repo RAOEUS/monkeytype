@@ -44,6 +44,7 @@ export function buildEventLog(): EventLog {
       customTextLimitMode: CustomText.getLimit().mode,
       customTextLimitValue: CustomText.getLimit().value,
     }),
+    ...(Config.stenoMode && { stenoMode: true as const }),
     ...(Config.funbox.length !== 0 && {
       isFunboxWithNospacePropertyActive: isFunboxActiveWithProperty("nospace"),
     }),

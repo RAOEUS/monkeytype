@@ -29,6 +29,7 @@ import {
 import { showQuoteReportModal } from "../../../../states/quote-report";
 import { ResultDetails, resultState } from "../../../../states/result";
 import { CompletedResult } from "../../../../states/test";
+import { getStrokeCounts } from "../../../../steno/plover";
 import { cn } from "../../../../utils/cn";
 import { secondsToString } from "../../../../utils/date-and-time";
 import { getLanguageDisplayString } from "../../../../utils/strings";
@@ -68,6 +69,20 @@ export function ResultSecondaryStats(props: Props): JSXElement {
     const afk = `${props.result.afkDuration}s afk ${afkPercent()}%`;
     if (decimals()) return afk;
     return `${roundTo2(props.result.testDuration)}s (${afk})`;
+  };
+
+  // steno mode, from Plover's strokes during the test
+  const strokesBalloon = (): string => {
+    const { strokes, undone } = getStrokeCounts();
+    // a word is five correct characters, as for wpm
+    const words = (props.result.charStats[0] ?? 0) / 5;
+    const kept = strokes - undone;
+    return [
+      "strokes",
+      "undone",
+      `${format().percentage((kept / strokes) * 100)} stroke accuracy`,
+      ...(words > 0 ? [`${roundTo2(kept / words)} strokes per word`] : []),
+    ].join("\n");
   };
 
   const testType = createMemo(() =>
@@ -123,6 +138,20 @@ export function ResultSecondaryStats(props: Props): JSXElement {
           {props.result.charStats.join("/")}
         </Balloon>
       </div>
+
+      <Show when={getConfig.stenoMode && getStrokeCounts().strokes > 0}>
+        <div data-ui-element="resultStat">
+          <div class="text-sub">strokes</div>
+          <Balloon
+            data-ui-element="resultStatValue"
+            class={cn("text-[2em] leading-[1em] text-main", mobileBalloonClass)}
+            text={strokesBalloon()}
+            break
+          >
+            {getStrokeCounts().strokes}/{getStrokeCounts().undone}
+          </Balloon>
+        </div>
+      </Show>
 
       <div data-ui-element="resultStat">
         <div class="text-sub">consistency</div>

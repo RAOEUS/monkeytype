@@ -57,6 +57,9 @@ export type IndicateTypos = z.infer<typeof IndicateTyposSchema>;
 export const CompositionDisplaySchema = z.enum(["off", "below", "replace"]);
 export type CompositionDisplay = z.infer<typeof CompositionDisplaySchema>;
 
+export const StenoHintsSchema = z.enum(["off", "text", "diagram"]);
+export type StenoHints = z.infer<typeof StenoHintsSchema>;
+
 export const TimerStyleSchema = z.enum([
   "off",
   "bar",
@@ -442,6 +445,8 @@ export const ConfigSchema = z
     quickEnd: z.boolean(),
     indicateTypos: IndicateTyposSchema,
     compositionDisplay: CompositionDisplaySchema,
+    stenoMode: z.boolean(),
+    stenoHints: StenoHintsSchema,
     hideExtraLetters: z.boolean(),
     lazyMode: z.boolean(),
     layout: LayoutSchema,

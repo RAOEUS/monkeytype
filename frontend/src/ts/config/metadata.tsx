@@ -11,6 +11,7 @@ import { getCustomThemes } from "../queries/custom-themes";
 import { isAuthenticated } from "../states/core";
 import { showNoticeNotification } from "../states/notifications";
 import { setRandomTheme } from "../states/theme";
+import { stenoSettings } from "../steno/settings";
 import { FaObject } from "../types/font-awesome";
 import { Validation } from "../types/validation";
 import { areUnsortedArraysEqual } from "../utils/arrays";
@@ -872,6 +873,40 @@ const configMetadataEntries = {
     group: "input",
     description:
       'Change how composition is displayed. "off" will just underline the letter if composition is active. "below" will show the composed character below the test. "replace" will replace the letter in the test with the composed character.',
+    commandline: {
+      subgroup: {
+        options: "fromSchema",
+      },
+    },
+  },
+  stenoMode: {
+    key: "stenoMode",
+    fa: { icon: "fa-keyboard" },
+    displayString: "steno mode",
+    changeRequiresRestart: false,
+    group: "input",
+    description:
+      "For typing with a steno machine through Plover. Connects to your running Plover for hints, and measures accuracy on the text as it stands: what a later stroke of an outline replaces is not an error. Turning it on sets the settings Plover's corrections need: freedom mode on, confidence mode, strict space, stop on error and delete on error off.",
+    overrideConfig: ({ value, currentConfig }) =>
+      value ? stenoSettings(currentConfig) : {},
+    optionsMetadata: {
+      true: { displayString: "on" },
+      false: { displayString: "off" },
+    },
+    commandline: {
+      subgroup: {
+        options: "fromSchema",
+      },
+    },
+  },
+  stenoHints: {
+    key: "stenoHints",
+    fa: { icon: "fa-lightbulb" },
+    displayString: "steno hints",
+    changeRequiresRestart: false,
+    group: "input",
+    description:
+      'In steno mode, shows how to stroke the current word below the test: outlines, alternatives and phrase briefs, looked up in your running Plover, so its system and dictionaries apply. "Diagram" also draws the keys of each stroke on a steno board.',
     commandline: {
       subgroup: {
         options: "fromSchema",

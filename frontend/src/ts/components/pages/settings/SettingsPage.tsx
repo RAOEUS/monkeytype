@@ -102,6 +102,8 @@ export function SettingsPage(): JSXElement {
           <SearchableAutoSetting key="indicateTypos" />
           <SearchableAutoSetting key="hideExtraLetters" />
           <SearchableAutoSetting key="compositionDisplay" />
+          <SearchableAutoSetting key="stenoMode" />
+          <SearchableAutoSetting key="stenoHints" />
           <SearchableAutoSetting key="lazyMode" />
           <Layout />
           <SearchableAutoSetting key="codeUnindentOnBackspace" />

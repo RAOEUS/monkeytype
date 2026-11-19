@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/solid-router";
 import { JSXElement } from "solid-js";
 
+import { getConfig } from "../../../config/store";
 import { getRoutePage } from "../../../states/router";
 import { isFocusMode } from "../../../states/test";
 import { restartTest } from "../../../test/test-logic";
@@ -8,11 +9,14 @@ import { cn } from "../../../utils/cn";
 import { isDevEnvironment } from "../../../utils/env";
 
 export function Logo(): JSXElement {
+  // this fork's name while its steno mode is on
+  const name = (): string =>
+    getConfig.stenoMode ? "monkeysteno" : "monkeytype";
   return (
     <Link
       to="/"
       class="group/logo -m-2 flex h-6 w-max gap-2 rounded-[0.8rem] p-2"
-      aria-label="Monkeytype Home"
+      aria-label={`${name()} Home`}
       style={{
         "box-sizing": "content-box",
         "font-family": "Lexend Deca ,sans-serif",
@@ -59,7 +63,7 @@ export function Logo(): JSXElement {
           })}
           data-ui-element="logoText"
         >
-          monkeytype
+          {name()}
         </h1>
       </div>
     </Link>

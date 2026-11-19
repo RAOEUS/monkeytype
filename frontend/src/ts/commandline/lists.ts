@@ -117,6 +117,8 @@ export const commands: CommandsSubgroup = {
       "quickEnd",
       "indicateTypos",
       "compositionDisplay",
+      "stenoMode",
+      "stenoHints",
       "hideExtraLetters",
       "lazyMode",
       "layout",

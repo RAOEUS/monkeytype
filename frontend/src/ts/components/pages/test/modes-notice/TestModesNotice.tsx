@@ -5,6 +5,7 @@ import { getActiveTags } from "../../../../queries/tags";
 import { showCommandline } from "../../../../states/commandline";
 import { getCustomTextIndicator, getFormatting } from "../../../../states/core";
 import { hotkeys } from "../../../../states/hotkeys";
+import { showModal } from "../../../../states/modals";
 import {
   isFocusMode,
   getLoadedChallenge,
@@ -14,6 +15,8 @@ import {
   wordsHaveNewline,
   wordsHaveTab,
 } from "../../../../states/test";
+import { getPloverSystem, isPloverConnected } from "../../../../steno/plover";
+import { stenoConflicts } from "../../../../steno/settings";
 import { getActiveFunboxNames } from "../../../../test/funbox/list";
 import { cn } from "../../../../utils/cn";
 import {
@@ -58,6 +61,7 @@ export function TestModesNotice() {
       <Layout />
       <OppositeShift />
       <Tags />
+      <Plover />
     </div>
   );
 }
@@ -387,5 +391,32 @@ function Tags() {
         .map((tag) => tag.name)
         .join(", ")}
     />
+  );
+}
+
+function Plover() {
+  const hasConflicts = () =>
+    getConfig.stenoMode && stenoConflicts(getConfig).length > 0;
+  return (
+    <>
+      <Notice
+        when={getConfig.stenoMode}
+        icon="fa-keyboard"
+        onClick={() => showModal("Steno")}
+        class={cn({ "text-error": !isPloverConnected() })}
+        text={
+          isPloverConnected()
+            ? `plover: ${getPloverSystem() ?? "connected"}`
+            : "plover not connected"
+        }
+      />
+      <Notice
+        when={hasConflicts()}
+        icon="fa-exclamation-triangle"
+        onClick={() => showModal("Steno")}
+        class="text-error"
+        text="settings conflict with steno"
+      />
+    </>
   );
 }
